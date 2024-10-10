@@ -8,19 +8,15 @@
 </head>
 <body>
 <h1>TTS 플레이어</h1>
-<input type="text" id="textInput" placeholder="텍스트를 입력하세요">
-<button onclick="convertAndPlay()">변환 및 재생</button>
-<audio id="audioPlayer" controls style="display: none;"></audio>
+<audio id="audioPlayer" controls style="display: none;" muted></audio>
 
 <script>
-    async function convertAndPlay() {
-        const text = document.getElementById('textInput').value;
+    async function autoPlay() {
         const audioPlayer = document.getElementById('audioPlayer');
 
         try {
             // 서버에 TTS 요청
-            const response = await axios.get('/test', {
-                params: { text: text },
+            const response = await axios.get('/api/fortune', {
                 responseType: 'blob'  // 바이너리 데이터로 응답 받기
             });
 
@@ -28,15 +24,23 @@
             const audioBlob = new Blob([response.data], { type: 'audio/mp3' });
             const audioUrl = URL.createObjectURL(audioBlob);
 
-            // 오디오 플레이어 설정 및 재생
+            // 오디오 플레이어 설정
             audioPlayer.src = audioUrl;
-            audioPlayer.style.display = 'block';
-            audioPlayer.play();
+            audioPlayer.style.display = 'block'; // 플레이어 보이기
+
+            // 자동 재생
+            audioPlayer.play().catch(error => {
+                console.warn('자동 재생 실패:', error);
+                alert('음성을 재생하려면 음소거를 해제해 주세요.');
+            });
         } catch (error) {
             console.error('오류 발생:', error);
-            alert('오디오 변환 중 오류가 발생했습니다.');
+            alert('운세를 가져오는 데 실패했습니다.');
         }
     }
+
+    // 페이지 로드 시 자동 재생
+    window.onload = autoPlay;
 </script>
 </body>
 </html>
