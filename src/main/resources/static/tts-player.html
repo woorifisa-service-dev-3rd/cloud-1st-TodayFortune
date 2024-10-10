@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTS 플레이어</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
+</head>
+<body>
+<h1>TTS 플레이어</h1>
+<input type="text" id="textInput" placeholder="텍스트를 입력하세요">
+<button onclick="convertAndPlay()">변환 및 재생</button>
+<audio id="audioPlayer" controls style="display: none;"></audio>
+
+<script>
+    async function convertAndPlay() {
+        const text = document.getElementById('textInput').value;
+        const audioPlayer = document.getElementById('audioPlayer');
+
+        try {
+            // 서버에 TTS 요청
+            const response = await axios.get('/test', {
+                params: { text: text },
+                responseType: 'blob'  // 바이너리 데이터로 응답 받기
+            });
+
+            // Blob URL 생성
+            const audioBlob = new Blob([response.data], { type: 'audio/mp3' });
+            const audioUrl = URL.createObjectURL(audioBlob);
+
+            // 오디오 플레이어 설정 및 재생
+            audioPlayer.src = audioUrl;
+            audioPlayer.style.display = 'block';
+            audioPlayer.play();
+        } catch (error) {
+            console.error('오류 발생:', error);
+            alert('오디오 변환 중 오류가 발생했습니다.');
+        }
+    }
+</script>
+</body>
+</html>
