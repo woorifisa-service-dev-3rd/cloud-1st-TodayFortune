@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>운세 결과</title>
+</head>
+<body>
+<h1>당신의 오늘의 운세</h1>
+<p th:text="${horoscope}"></p> <!-- 서버에서 전달된 운세 결과를 표시 -->
+<a href="/">다시 확인하기</a>
+</body>
+</html>
