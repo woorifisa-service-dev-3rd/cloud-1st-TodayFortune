@@ -16,6 +16,7 @@ public class TTSServiceImpl implements TTSService{
     public byte[] converStringToSpeechMp3(String text) {
 
         log.info("Text는받았고"+text);
+        log.info("cicdtest");
 
         SynthesisInput input = SynthesisInput.newBuilder()
                 .setText(text)
